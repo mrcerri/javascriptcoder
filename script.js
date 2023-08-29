@@ -21,7 +21,11 @@ function ingreseCuotas() {
   validarCantDeCuotasPermitidas(cuotas)
 
   // Verifico antes de continuar, relacion cuota ingreso para esta cantidad de cuotas
-  validarRelacionCuotaIngreso(ingresoDeclarado,montoSolicitado,cantidadDeCuotas)
+  validarRelacionCuotaIngreso(
+    ingresoDeclarado,
+    montoSolicitado,
+    cantidadDeCuotas
+  )
 }
 
 //FIN FUNCIONES DE INGRESO DE DATOS
@@ -118,7 +122,6 @@ function validarRelacionCuotaIngreso(
     (1 - (1 + tasaTransitoria) ** -cantidadDeCuotas)
 
   if (cuotaPosible > ingresoDeclarado * relacionCuotaIngreso) {
-
     let relaCuotaIngreso = (cuotaPosible / ingresoDeclarado) * 100
 
     alert(
@@ -162,15 +165,32 @@ function calcularPrestamo(montoSolicitado, cantidadDeCuotas) {
 
   let interes = 0
   let capital = 0
+  let cuotaTotal = 0
   let saldoPrestamo = montoSolicitado
   let cuotaN = 0
-
+  let prestamo =
+    "Cuota N°     Capital          Interés           Total        Saldo de Préstamo\n"
   for (let i = 0; i < cantidadDeCuotas; i++) {
     cuotaN = i + 1
     interes = saldoPrestamo * tasaTransitoria
     capital = cuotaPosible - interes
+    cuotaTotal = capital + interes
     saldoPrestamo = saldoPrestamo - capital
-    alert(
+    prestamo =
+      prestamo +
+      "     " +
+      cuotaN +
+      "          $" +
+      capital.toFixed(2) +
+      "      $" +
+      interes.toFixed(2) +
+      "      $" +
+      cuotaTotal.toFixed(2) +
+      "      $" +
+      saldoPrestamo.toFixed(2) +
+      "\n"
+
+    /*     alert(
       "A continuación, se muestra el desarrollo del préstamo solicitado:" +
         "\n" +
         "Monto del préstamo: $" +
@@ -196,9 +216,10 @@ function calcularPrestamo(montoSolicitado, cantidadDeCuotas) {
         "\n" +
         "Saldo del Préstamo: $ " +
         saldoPrestamo.toFixed(2) +
-        "\n"
-    )
+        "\n" 
+    )*/
   }
+  alert(prestamo)
 }
 // FIN FUNCIONES DEL SIMULADOR
 //--------------------------------------------------------------
@@ -265,7 +286,6 @@ ingreseIngresos()
 
 // Ingreso de monto solicitado
 ingreseMontoSolicitado()
-
 
 // Ingreso de cantidad de cuotas
 ingreseCuotas()
