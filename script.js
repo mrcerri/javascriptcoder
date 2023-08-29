@@ -30,7 +30,7 @@ function ingreseCuotas() {
 // Valido que el valor ingresado sea un número:
 
 function validarNumero(caso, numIngresado) {
-  var number = parseInt(numIngresado)
+  let number = parseInt(numIngresado)
   if (!isNaN(number) && number > 0) {
     return numIngresado
   } else {
