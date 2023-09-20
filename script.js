@@ -59,6 +59,12 @@ function validarNumero(caso, numIngresado) {
         )
         ingreseCuotas() //le vuelvo a pedir que ingrese el dato
         break
+      case 4: //Opcion post calculo de prestamo
+        alert(
+          "El valor ingresado no es una opción válida, intente nuevamente. "
+        )
+        ingreseOpciones() //le vuelvo a pedir que ingrese la opción
+        break
       default:
         break
     }
@@ -136,6 +142,7 @@ function validarRelacionCuotaIngreso(
     ingreseCuotas()
   }
 }
+
 // FIN FUNCIONES DE VALIDACION
 //--------------------------------------------------------------
 // FUNCIONES DEL SIMULADOR
@@ -170,8 +177,41 @@ function calcularPrestamo(montoSolicitado, cantidadDeCuotas) {
   let cuotaN = 0
   let prestamo =
     "Cuota N°     Capital          Interés           Total        Saldo de Préstamo\n"
+  let cuota = {}
+  let cuotas = []
+  //cargo el objeto cuota
   for (let i = 0; i < cantidadDeCuotas; i++) {
     cuotaN = i + 1
+    interes = saldoPrestamo * tasaTransitoria
+    capital = cuotaPosible - interes
+    cuotaTotal = capital + interes
+    saldoPrestamo = saldoPrestamo - capital
+
+    cuota = {
+      cuotaN,
+      interes: interes.toFixed(2),
+      capital: capital.toFixed(2),
+      cuotaTotal: cuotaTotal.toFixed(2),
+      saldoPrestamo: saldoPrestamo.toFixed(2),
+    }
+    //agrego la cuota al array de cuotas
+    cuotas.push(cuota)
+
+    /*     prestamo =
+      prestamo +
+      "     " +
+      cuotaN +
+      "          $" +
+      capital.toFixed(2) +
+      "      $" +
+      interes.toFixed(2) +
+      "      $" +
+      cuotaTotal.toFixed(2) +
+      "      $" +
+      saldoPrestamo.toFixed(2) +
+      "\n"
+ */
+    /*     cuotaN = i + 1
     interes = saldoPrestamo * tasaTransitoria
     capital = cuotaPosible - interes
     cuotaTotal = capital + interes
@@ -188,39 +228,22 @@ function calcularPrestamo(montoSolicitado, cantidadDeCuotas) {
       cuotaTotal.toFixed(2) +
       "      $" +
       saldoPrestamo.toFixed(2) +
-      "\n"
-
-    /*     alert(
-      "A continuación, se muestra el desarrollo del préstamo solicitado:" +
-        "\n" +
-        "Monto del préstamo: $" +
-        montoSolicitado +
-        " en " +
-        cantidadDeCuotas +
-        " cuotas fijas." +
-        "\n" +
-        "Cuota N°" +
-        cuotaN +
-        ":" +
-        "\n" +
-        "                    Capital: $ " +
-        capital.toFixed(2) +
-        "\n" +
-        "                    Interés: $ " +
-        interes.toFixed(2) +
-        "\n" +
-        "                -----------------" +
-        "\n" +
-        "             Cuota Total: $ " +
-        cuotaPosible.toFixed(2) +
-        "\n" +
-        "Saldo del Préstamo: $ " +
-        saldoPrestamo.toFixed(2) +
-        "\n" 
-    )*/
+      "\n" */
   }
-  alert(prestamo)
+  //alert(prestamo) ACÁ MUESTRO EL PRÉSTAMO USANDO LA VARIABLE PRESTAMO.
+  console.log(cuotas)
+  // recorro el array de cuotas y cada objeto para armar la proyección del préstamo en un alert
+
+  for (let i = 0; i < cuotas.length; i++) {
+    const element = cuotas[i]
+    // entro a cada objeto
+    /*   for (const propiead in cuota) {
+   console.log(cuota[propiead]) 
+      
+    }*/
+  }
 }
+
 // FIN FUNCIONES DEL SIMULADOR
 //--------------------------------------------------------------
 // Parámetros del simulador y declaracion de variables globales
@@ -290,5 +313,62 @@ ingreseMontoSolicitado()
 // Ingreso de cantidad de cuotas
 ingreseCuotas()
 
-// Calculo el prestamo y muestro el desarrollo en un alert.
+// Calculo el prestamo
 calcularPrestamo(montoSolicitado, cantidadDeCuotas)
+
+//----------------------------------------------------------------------------------------------------------------
+/* Solicito que ingrese datos:
+1. Para visualizar el desarrollo del préstamo completo
+2. Para ver la composición de una cuota en particular.*/
+let opcionDeclarada = 0
+ingreseOpciones()
+
+//Funcion IngreseOpciones
+
+function ingreseOpciones() {
+  numIngresado = prompt(
+    "Ingrese el monto de sus ingresos mensules demostrables:" +
+      "\n" +
+      "1. Para visualizar el desarrollo del préstamo completo" +
+      "\n" +
+      "2. Para ver la composición de una cuota en particular."
+  )
+  opcionDeclarada = parseInt(validarNumero(4, numIngresado))
+  alert(opcionDeclarada)
+  validarOpcionSolicitada(opcionDeclarada)
+}
+
+// Valido opcion solicitada
+
+function validarOpcionSolicitada(opcionDeclarada) {
+  if (opcionDeclarada == 1 || opcionDeclarada == 2) {
+    // dependiendo de la opcion seleccionada, realizo la acción correspondiente
+    alert("Opción correcta: " + opcionDeclarada)
+
+    switch (opcionDeclarada) {
+      case 1: //Desarrollo del préstamo
+        alert("préstamo completo")
+        break
+
+      case 2: //Cuota particular
+        alert("cuota particular")
+        break
+
+      default:
+        alert("default " + opcionDeclarada)
+        break
+    }
+  } else {
+    alert("Opción incorrecta")
+    alert("selecionó " + opcionDeclarada)
+
+    ingreseOpciones()
+  }
+}
+/* //Ingresos
+function ingreseIngresos() {
+  numIngresado = prompt(
+    "Ingrese el monto de sus ingresos mensules demostrables:"
+  )
+  ingresoDeclarado = validarNumero(1, numIngresado)
+} */
