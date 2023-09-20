@@ -27,6 +27,20 @@ function ingreseCuotas() {
     cantidadDeCuotas
   )
 }
+//Funcion IngreseOpciones
+
+function ingreseOpciones() {
+  numIngresado = prompt(
+    "Ingrese el monto de sus ingresos mensules demostrables:" +
+      "\n" +
+      "1. Para visualizar el desarrollo del préstamo completo" +
+      "\n" +
+      "2. Para ver la composición de una cuota en particular."
+  )
+  let opcionDeclarada = parseInt(validarNumero(4, numIngresado))
+
+  validarOpcionSolicitada(opcionDeclarada)
+}
 
 //FIN FUNCIONES DE INGRESO DE DATOS
 //--------------------------------------------------------------
@@ -143,6 +157,103 @@ function validarRelacionCuotaIngreso(
   }
 }
 
+// Valido opcion solicitada
+
+function validarOpcionSolicitada(opcionDeclarada) {
+  if (opcionDeclarada == 1 || opcionDeclarada == 2) {
+    // dependiendo de la opcion seleccionada, realizo la acción correspondiente
+
+    switch (opcionDeclarada) {
+      case 1: //Desarrollo del préstamo
+        alert("Ha seleccionado visualizar el préstamo completo")
+        let miPrestamo2 = calcularPrestamo(montoSolicitado, cantidadDeCuotas)
+        let prestamo =
+          "Cuota N°     Capital          Interés           Total        Saldo de Préstamo\n"
+
+        for (let i = 0; i < miPrestamo2.length; i++) {
+          let objetoCuota = miPrestamo2[i]
+          let CuotaNumero = objetoCuota.cuotaN
+          let cuotaCapital = objetoCuota.capital
+          let cuotaInteres = objetoCuota.interes
+          let cuotaEnTotal = objetoCuota.cuotaTotal
+          let saldoDelPrestamo = objetoCuota.saldoPrestamo
+
+          //alert("cuota número: " + CuotaNumero)
+          prestamo =
+            prestamo +
+            "     " +
+            CuotaNumero +
+            "          $" +
+            cuotaCapital +
+            "      $" +
+            cuotaInteres +
+            "      $" +
+            cuotaEnTotal +
+            "      $" +
+            saldoDelPrestamo +
+            "\n"
+        }
+        alert(prestamo)
+        alert("Gracias por utilizar el simulador de prestamos personales.")
+        break
+
+      case 2: //Cuota particular
+        alert("Ha seleccionado visualizar una cuota particular")
+        let cuotaParticular = parseInt(
+          prompt("Por favor, ingrese la cuota de que mes desea consultar")
+        )
+        
+        if (cuotaParticular < 3 || cuotaParticular > cantidadDeCuotas) {
+          alert(
+            "Recuerde que el mínimo de cuotas es 3 y el máximo según su elección es " +
+              cantidadDeCuotas
+          )
+          opcionDeclarada = 2
+          validarOpcionSolicitada(opcionDeclarada)
+        } else {
+        cuotaParticular = cuotaParticular - 1
+        let miPrestamo = calcularPrestamo(montoSolicitado, cantidadDeCuotas)
+        let objetoCuota = miPrestamo[cuotaParticular]
+        let CuotaNumero = objetoCuota.cuotaN
+        let cuotaCapital = objetoCuota.capital
+        let cuotaInteres = objetoCuota.interes
+        let cuotaEnTotal = objetoCuota.cuotaTotal
+        let saldoDelPrestamo = objetoCuota.saldoPrestamo
+        alert(
+          "Detalle de cuota solicitada: " +
+            "\n" +
+            "          Cuota Número: " +
+            CuotaNumero +
+            "\n" +
+            "                    Capital: $ " +
+            cuotaCapital +
+            "\n" +
+            "                    Interés: $ " +
+            cuotaInteres +
+            "\n" +
+            "             Cuota Total: $ " +
+            cuotaEnTotal +
+            "\n" +
+            "Saldo del préstamo: $ " +
+            saldoDelPrestamo +
+            "\n"
+        )
+        alert("Gracias por utilizar el simulador de prestamos personales.")
+      }
+        break
+
+      default:
+        alert("default " + opcionDeclarada)
+        break
+    }
+  } else {
+    alert("Opción incorrecta")
+    alert("selecionó " + opcionDeclarada)
+
+    ingreseOpciones()
+  }
+}
+
 // FIN FUNCIONES DE VALIDACION
 //--------------------------------------------------------------
 // FUNCIONES DEL SIMULADOR
@@ -162,7 +273,7 @@ function obtenerTasaMensual(cantidadDeCuotas) {
   }
 }
 
-// funcion que calcula el préstamo y lo muestra en un alert (final del simulador)
+// funcion que calcula el préstamo
 
 function calcularPrestamo(montoSolicitado, cantidadDeCuotas) {
   tasaTransitoria = obtenerTasaMensual(cantidadDeCuotas) / 12
@@ -175,8 +286,6 @@ function calcularPrestamo(montoSolicitado, cantidadDeCuotas) {
   let cuotaTotal = 0
   let saldoPrestamo = montoSolicitado
   let cuotaN = 0
-  let prestamo =
-    "Cuota N°     Capital          Interés           Total        Saldo de Préstamo\n"
   let cuota = {}
   let cuotas = []
   //cargo el objeto cuota
@@ -196,52 +305,9 @@ function calcularPrestamo(montoSolicitado, cantidadDeCuotas) {
     }
     //agrego la cuota al array de cuotas
     cuotas.push(cuota)
-
-    /*     prestamo =
-      prestamo +
-      "     " +
-      cuotaN +
-      "          $" +
-      capital.toFixed(2) +
-      "      $" +
-      interes.toFixed(2) +
-      "      $" +
-      cuotaTotal.toFixed(2) +
-      "      $" +
-      saldoPrestamo.toFixed(2) +
-      "\n"
- */
-    /*     cuotaN = i + 1
-    interes = saldoPrestamo * tasaTransitoria
-    capital = cuotaPosible - interes
-    cuotaTotal = capital + interes
-    saldoPrestamo = saldoPrestamo - capital
-    prestamo =
-      prestamo +
-      "     " +
-      cuotaN +
-      "          $" +
-      capital.toFixed(2) +
-      "      $" +
-      interes.toFixed(2) +
-      "      $" +
-      cuotaTotal.toFixed(2) +
-      "      $" +
-      saldoPrestamo.toFixed(2) +
-      "\n" */
   }
-  //alert(prestamo) ACÁ MUESTRO EL PRÉSTAMO USANDO LA VARIABLE PRESTAMO.
-  console.log(cuotas)
-  // recorro el array de cuotas y cada objeto para armar la proyección del préstamo en un alert
 
-  for (let i = 0; i < cuotas.length; i++) {
-    const element = cuotas[i]
-    // entro a cada objeto
-    /*   for (const propiead in cuota) {
-   console.log(cuota[propiead]) 
-      
-    }*/
-  }
+  return cuotas
 }
 
 // FIN FUNCIONES DEL SIMULADOR
@@ -252,6 +318,7 @@ let ingresoDeclarado = 0
 let montoSolicitado = 0
 let cantidadDeCuotas = 24
 let numIngresado = 0
+let opcionDeclarada = 0
 const relacionCuotaIngreso = 0.3
 
 // valores de las tasas para los tres tramos posibles de cuotas
@@ -313,62 +380,9 @@ ingreseMontoSolicitado()
 // Ingreso de cantidad de cuotas
 ingreseCuotas()
 
-// Calculo el prestamo
-calcularPrestamo(montoSolicitado, cantidadDeCuotas)
-
 //----------------------------------------------------------------------------------------------------------------
-/* Solicito que ingrese datos:
+/* Solicito que ingrese opciones:
 1. Para visualizar el desarrollo del préstamo completo
 2. Para ver la composición de una cuota en particular.*/
-let opcionDeclarada = 0
+
 ingreseOpciones()
-
-//Funcion IngreseOpciones
-
-function ingreseOpciones() {
-  numIngresado = prompt(
-    "Ingrese el monto de sus ingresos mensules demostrables:" +
-      "\n" +
-      "1. Para visualizar el desarrollo del préstamo completo" +
-      "\n" +
-      "2. Para ver la composición de una cuota en particular."
-  )
-  opcionDeclarada = parseInt(validarNumero(4, numIngresado))
-  alert(opcionDeclarada)
-  validarOpcionSolicitada(opcionDeclarada)
-}
-
-// Valido opcion solicitada
-
-function validarOpcionSolicitada(opcionDeclarada) {
-  if (opcionDeclarada == 1 || opcionDeclarada == 2) {
-    // dependiendo de la opcion seleccionada, realizo la acción correspondiente
-    alert("Opción correcta: " + opcionDeclarada)
-
-    switch (opcionDeclarada) {
-      case 1: //Desarrollo del préstamo
-        alert("préstamo completo")
-        break
-
-      case 2: //Cuota particular
-        alert("cuota particular")
-        break
-
-      default:
-        alert("default " + opcionDeclarada)
-        break
-    }
-  } else {
-    alert("Opción incorrecta")
-    alert("selecionó " + opcionDeclarada)
-
-    ingreseOpciones()
-  }
-}
-/* //Ingresos
-function ingreseIngresos() {
-  numIngresado = prompt(
-    "Ingrese el monto de sus ingresos mensules demostrables:"
-  )
-  ingresoDeclarado = validarNumero(1, numIngresado)
-} */
